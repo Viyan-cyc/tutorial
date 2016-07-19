@@ -1,0 +1,88 @@
+this:
+1.全局范围内，this指向全局对象
+2.函数调用Foo()，this指向全局对象
+3.方法调用text.Foo(),this指向调用方法的对象<text>
+4.调用构造函数new Foo(),this指向新创建的对象
+5.显式设置this，apply，call，e.g，
+  function foo(a, b, c) {}
+  var bar = {};
+  foo.apply(bar, [1, 2, 3]); // 数组将会被扩展，如下所示
+  foo.call(bar, 1, 2, 3); // 传递到foo的参数是：a = 1, b = 2, c = 3
+  使用apply或call时，函数内部的this显式设置为函数调用的第一个参数
+
+闭包和引用：
+1.定义:当前作用域总是能够访问外部作用域中的变量。
+2.JS中不可以对作用域进行引用或赋值
+
+arguments不是数组，而是对象
+把arguments转换为数组Array.prototype.slice.call(argumnets);
+
+构造函数：
+JS中通过new方式调用的函数都被认为是构造函数
+在构造函数的内部，this指向新创建的对象，新创建的对象的prototype指向构造函数的prototype
+
+作用域:
+JS不支持块级作用域，仅仅支持函数作用域
+局部变量：
+JS中，局部变量只能通过两种方式声明，函数参数 + var
+
+变量声明提升:
+var
+function 
+都会被提升到当前作用域的顶部
+
+匿名函数被认为是表达式，为了可调用性，首先回被执行
+
+数组：
+遍历：for(var i=0,l=list.length;i<l;i++)
+使用l=list.length来缓存数组的长度
+在JS中，undefined是一个变量
+为length设置一个更小的值会截断数组，但是增大length属性值不会对数组产生影响
+
+类型
+为了检测一个对象的类型，使用Object.prototype.toString
+e.g Object.prototype.toString.call("2") //"[object String]"
+
+除非为了检测一个变量是否已经定义，我们应尽量避免使用typeof操作
+
+instanceof用来比较两个操作数的构造函数，只有在比较自定义的对象时才有意义
+如果是用来比较内置类型，将会和typeof操作符一样用处不大
+instanceof操作符应该仅仅用来比较来自同一个JS上下文的自定义对象
+
+转换：
+--1.转换为字符串：
+""+10==="10" //true  将一个值加上空字符串可以轻松转换为字符串类型
+--2.转换为数字：
++"10"===10   //true  使用一元的加号操作符，可以把字符串转换为数字
+字符串转换为数字的常用方法:
++"010"===10
+Number("010")===10
+parenInt("010",10)===10
++"010.2"===10.2
+Number("010.2")===10.2
+parseInt("010.2",10)===10 //用来转换为整数
+--3.转换为布尔型
+通过使用两次否操作符，可以把一个值转化为布尔型
+!!{}  //true
+
+ eval 只在被直接调用并且调用函数就是 eval 本身时，才在当前作用域中执行。
+ 伪装的eval，定时函数setTimeout和setInterval都可以接受字符串作为它们的第一个参数，这个字符串总是在全局作用域中执行，因此eval在这种情况下没有被直接调用。
+
+ undefined和null
+ 比较有用的是undefined
+
+ setTimeout和setInterval的第一个参数的函数会在全局作用域中执行，因此函数内的this将会指向这个全局对象
+ function foo(){
+    //阻塞执行1秒
+ }
+ setInterval(foo,100);
+ 修改为：
+ function foo(){
+    //阻塞执行1秒
+    setInterval(foo,100)
+ }
+ 绝对不要使用字符串作为 setTimeout 或者 setInterval 的第一个参数
+ function foo(a,b,c){
+ }
+ setTimeout("foo(1,2,3)",1000);//不要这样子做
+ setTimeout(function(){foo(1,2,3);},100)//可以使用匿名函数完成相同的功能
